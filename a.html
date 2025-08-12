@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remote Control</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+        button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .status {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>📡 Remote Control</h2>
+        <input type="text" id="ip" placeholder="أدخل IP الكمبيوتر">
+        <button onclick="sendCommand()">تشغيل Notepad</button>
+        <div class="status" id="status"></div>
+    </div>
+
+    <script>
+        async function sendCommand() {
+            const ip = document.getElementById('ip').value.trim();
+            if (!ip) {
+                alert("من فضلك أدخل IP الكمبيوتر");
+                return;
+            }
+            try {
+                const res = await fetch(`http://${ip}:5000/click?btn=btn1`);
+                const text = await res.text();
+                document.getElementById('status').innerText = text === "success" ? "✅ تم التنفيذ" : "❌ فشل التنفيذ";
+            } catch (err) {
+                document.getElementById('status').innerText = "⚠️ خطأ في الاتصال";
+            }
+        }
+    </script>
+</body>
+</html>
